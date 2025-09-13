@@ -128,9 +128,11 @@ function planCombos(){
           const coverage = equipPct + rFix + pet.v + q;
           if(coverage + 1e-9 >= need){
             const waste = coverage - need;
-            results.push({ set:chosen, quickLevel:qLevel, pieces,
+            results.push({
+              set:chosen, quickLevel:qLevel, pieces,
               equipPct, rune:Math.round(rFix*100),
-              pet:pet.name, petV:pet.v, total:coverage, waste });
+              pet:pet.name, petV:pet.v, total:coverage, waste
+            });
             break;
           }
         }
@@ -138,9 +140,7 @@ function planCombos(){
     }
   }
 
-  console.log("DEBUG planCombos need=", need, "results=", results.length);
-  return results;
-}
+  // sort + dedupe
   results.sort((a,b)=>(a.pieces-b.pieces)||(a.quickLevel-b.quickLevel)||(b.rune-a.rune)||(b.petV-a.petV)||(a.waste-b.waste));
   const uniq=[], seen=new Set();
   for(const r of results){
@@ -148,9 +148,10 @@ function planCombos(){
     if(!seen.has(k)){ uniq.push(r); seen.add(k); }
     if(uniq.length>=7) break;
   }
+
+  console.log("DEBUG planCombos need=", need, "results=", uniq.length);
   return uniq;
 }
-
 const lineOf = r =>
   `${r.set}: ${r.pieces} piece${r.pieces===1?'':'s'} (${(r.equipPct*100).toFixed(2)}%)  |  Rune ${r.rune}%  |  Pet ${r.pet}  |  Quicken Lv.${r.quickLevel}`;
 
