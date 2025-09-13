@@ -58,8 +58,8 @@ document.getElementById('furyBtn')?.addEventListener('click', ()=>{
 
 // Helpers
 const clamp     = (x,min,max) => Math.max(min, Math.min(max, x));
-const pctInput  = id => (parseFloat(els[id].value || 0) / 100);
-const pctSelect = id => (parseFloat(els[id].value || 0) / 100); // for dropdowns
+const pctInput  = id => (els[id] && els[id].value !== '' ? parseFloat(els[id].value) / 100 : 0);
+const pctSelect = id => (els[id] && els[id].value !== '' ? parseFloat(els[id].value) / 100 : 0);
 const fmtPct    = f  => (f*100).toFixed(2) + '%';
 
 const applyTheme = () => {
