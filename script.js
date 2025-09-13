@@ -32,7 +32,18 @@ function wireSeg(segId, selectEl){
 wireSeg('classSeg', els.cls);
 wireSeg('weaponSeg', document.getElementById('weap'));
 wireSeg('optSetSeg', els.optSet);
+// Initialize hidden selects from the default "is-active" segmented buttons
+function initFromSeg(segId, selectEl){
+  const active = document.querySelector(`#${segId} button.is-active`);
+  if (active && selectEl) selectEl.value = active.dataset.val;
+}
 
+// Call once on load so recalc() has real values
+function initDefaults(){
+  initFromSeg('classSeg', els.cls);        // e.g. Sorcerer
+  initFromSeg('weaponSeg', els.weap);      // e.g. Original
+  initFromSeg('optSetSeg', els.optSet);    // e.g. Abyss
+}
 // Fury toggle
 const furyRow=document.getElementById("furyRow");
 document.getElementById('furyBtn')?.addEventListener('click', ()=>{
@@ -179,6 +190,7 @@ document.addEventListener('focusout', e=>{
 );
 
 // Initial calc
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded", () => {
+  initDefaults();
   recalc();
 });
