@@ -34,6 +34,128 @@
 </header>
 
 <main>
+  <!-- UI content for <main> -->
+
+<!-- Base & Buffs -->
+<div class="card"><div class="inner">
+  <h2 data-i18n="buffs">Base & Buffs</h2>
+  <div class="section">
+    <div class="row">
+      <label data-i18n="class">Class</label>
+      <div class="seg" id="classSeg">
+        <button type="button" data-val="Berserker"><span class="icon bers"></span> <span data-i18n="berserker">Berserker</span></button>
+        <button type="button" data-val="Paladin"><span class="icon pala"></span> <span data-i18n="paladin">Paladin</span></button>
+        <button type="button" data-val="Ranger"><span class="icon rang"></span> <span data-i18n="ranger">Ranger</span></button>
+        <button type="button" data-val="Sorcerer" class="is-active"><span class="icon sorc"></span> <span data-i18n="sorcerer">Sorcerer</span></button>
+      </div>
+      <select id="cls" class="hidden"></select>
+    </div>
+
+    <div class="row">
+      <label data-i18n="weapon">Weapon</label>
+      <div class="seg" id="weaponSeg">
+        <button type="button" data-val="Original" class="is-active"><span data-i18n="setOriginal">Original</span></button>
+        <button type="button" data-val="Primal"><span data-i18n="setPrimal">Primal</span></button>
+        <button type="button" data-val="Chaos"><span data-i18n="setChaos">Chaos</span></button>
+        <button type="button" data-val="Abyss"><span data-i18n="setAbyss">Abyss</span></button>
+        <button type="button" data-val="PVP/Boss"><span data-i18n="setPvP">PVP/Boss</span></button>
+      </div>
+      <select id="weap" class="hidden"></select>
+    </div>
+
+    <div class="row">
+      <label data-i18n="char">Characteristic</label>
+      <select id="char"></select>
+    </div>
+
+    <div class="row">
+      <label data-i18n="col">Atk SPD Colour</label>
+      <select id="col"></select>
+    </div>
+
+    <div class="row">
+      <label data-i18n="guild">Guild Buff</label>
+      <div class="pct"><input id="guild" type="number" inputmode="decimal" step="0.1" value="5"><span class="suffix">%</span></div>
+    </div>
+
+    <div class="row">
+      <label data-i18n="secret">Secret Tech</label>
+      <div class="pct"><input id="secret" type="number" inputmode="decimal" step="0.1" value="10"><span class="suffix">%</span></div>
+    </div>
+
+    <div class="row">
+      <label data-i18n="equip">Equipment ATK SPD</label>
+      <div class="pct"><input id="equip" type="number" inputmode="decimal" step="0.1" value="0"><span class="suffix">%</span></div>
+    </div>
+
+    <div class="row">
+      <label data-i18n="rune">Rune ATK SPD</label>
+      <div class="pct"><input id="rune" type="number" inputmode="decimal" step="0.1" value="0"><span class="suffix">%</span></div>
+    </div>
+
+    <div class="row">
+      <label data-i18n="pet">Pet Gear</label>
+      <select id="pet"></select>
+    </div>
+
+    <input id="target" type="hidden" value="0.25">
+
+    <div class="row">
+      <label data-i18n="quicken">Quicken</label>
+      <select id="quicken"></select>
+    </div>
+
+    <div class="row" id="furyRow">
+      <label data-i18n="fury">Fury Lv.10</label>
+      <div class="seg"><button type="button" id="furyBtn" data-on="0" data-i18n="off">Off</button></div>
+      <input id="fury" type="checkbox" class="hidden">
+    </div>
+  </div>
+
+  <div style="margin-top:12px" class="section">
+    <div class="row" style="grid-column:1 / -1">
+      <div class="bar" id="pbar"><div id="progressFill"></div></div>
+      <div class="muted" id="progressText">Progress: —</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <label data-i18n="required">Required ATK SPD</label>
+      <div class="value pct"><input id="requiredBox" type="number" readonly><span class="suffix">%</span></div>
+    </div>
+    <div class="stat">
+      <label data-i18n="final">Final ATK SPD</label>
+      <div class="value"><input id="finalBox" type="number" readonly></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- Optimizer -->
+<div class="card"><div class="inner">
+  <h2 data-i18n="optimizer">Optimizer</h2>
+  <div class="section">
+    <div class="row">
+      <label data-i18n="optSet">Optimize for Set</label>
+      <div class="seg" id="optSetSeg">
+        <button type="button" data-val="Abyss" class="is-active"><span data-i18n="setAbyss">Abyss</span></button>
+        <button type="button" data-val="Chaos"><span data-i18n="setChaos">Chaos</span></button>
+        <button type="button" data-val="Original"><span data-i18n="setOriginal">Original</span></button>
+        <button type="button" data-val="Primal"><span data-i18n="setPrimal">Primal</span></button>
+      </div>
+      <select id="optSet" class="hidden"></select>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0">
+    <button class="btn" id="applyBest" data-i18n="apply">Apply Optimal</button>
+  </div>
+
+  <div id="bestLine" style="font-weight:800;margin-bottom:6px">—</div>
+  <div id="bestWaste" class="muted" style="margin-bottom:10px">—</div>
+  <h2 style="margin-top:8px" data-i18n="alts">Alternates</h2>
+  <ul id="altList" style="margin:8px 0 0 18px"></ul>
+</div></div>
   <!-- === FULL HTML UI from your original index.html goes here with data-i18n tags === -->
 </main>
 
