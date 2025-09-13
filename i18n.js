@@ -120,3 +120,20 @@ document.addEventListener("DOMContentLoaded",()=>{
   applyLang("en");
   document.getElementById("langSwitcher").addEventListener("change", e=>applyLang(e.target.value));
 });
+// === DEBUG DUMP ===
+document.addEventListener("DOMContentLoaded", ()=>{
+  const selects = ["char","col","pet","quicken"];
+  let out = "<h3 style='color:#ffcc00'>DEBUG VALUES</h3><pre style='font-size:12px;color:#ffcc00'>";
+  selects.forEach(id=>{
+    const sel = document.getElementById(id);
+    if(sel){
+      out += id + ":\n";
+      sel.querySelectorAll("option").forEach(opt=>{
+        out += "  value=" + opt.value + "  text=" + opt.textContent + "\n";
+      });
+      out += "\n";
+    }
+  });
+  out += "</pre>";
+  document.body.insertAdjacentHTML("beforeend", out);
+});
