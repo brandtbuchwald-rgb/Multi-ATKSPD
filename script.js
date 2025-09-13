@@ -17,7 +17,7 @@ const els = (ids => ids.reduce((o,id)=>(o[id]=document.getElementById(id),o),{})
    "bestLine","bestWaste","altList","applyBest","optSet"]
 );
 
-// Segmented controls -> hidden selects
+// Wire segmented controls to hidden selects
 function wireSeg(segId, selectEl){
   const seg = document.getElementById(segId);
   seg?.addEventListener('click', e=>{
@@ -33,15 +33,15 @@ wireSeg('classSeg', els.cls);
 wireSeg('weaponSeg', els.weap);
 wireSeg('optSetSeg', els.optSet);
 
-// Initialize hidden selects based on default active buttons
+// Initialize hidden selects from defaults
 function initFromSeg(segId, selectEl){
   const active = document.querySelector(`#${segId} button.is-active`);
   if (active && selectEl) selectEl.value = active.dataset.val;
 }
 function initDefaults(){
-  initFromSeg('classSeg',  els.cls);   // e.g. Sorcerer
-  initFromSeg('weaponSeg', els.weap);  // e.g. Original
-  initFromSeg('optSetSeg', els.optSet); // e.g. Abyss
+  initFromSeg('classSeg',  els.cls);
+  initFromSeg('weaponSeg', els.weap);
+  initFromSeg('optSetSeg', els.optSet);
 }
 
 // Fury toggle
@@ -56,10 +56,10 @@ document.getElementById('furyBtn')?.addEventListener('click', ()=>{
   recalc();
 });
 
-// Helpers (numeric selects!)
+// Helpers
 const clamp     = (x,min,max) => Math.max(min, Math.min(max, x));
 const pctInput  = id => (parseFloat(els[id].value || 0) / 100);
-const pctSelect = id => (parseFloat(els[id].value || 0) / 100);
+const pctSelect = id => (parseFloat(els[id].value || 0) / 100); // works for select values "6" -> 0.06
 const fmtPct    = f  => (f*100).toFixed(2) + '%';
 
 const applyTheme = () => {
@@ -68,6 +68,7 @@ const applyTheme = () => {
   b.classList.add('theme-' + els.optSet.value);
 };
 
+// Current state
 function currentState(includeEquipRune=true){
   const cls = els.cls.value, weap = els.weap.value, baseSpd = base[weap][cls];
 
@@ -79,7 +80,7 @@ function currentState(includeEquipRune=true){
   const equip  = includeEquipRune ? pctInput('equip') : 0;
   const rune   = includeEquipRune ? pctInput('rune')  : 0;
   const petPct = pctSelect('pet');
-  const quick  = pctSelect('quicken'); // values 0..5 -> 0..0.05
+  const quick  = pctSelect('quicken'); // 0.00..0.05
   const fury   = (els.fury.checked && cls === 'Berserker') ? 0.25 : 1.0;
 
   const buffsBase = char + color + guild + secret;
@@ -102,7 +103,7 @@ function planCombos(){
   const pieceVal = SET_VAL[chosen];
   if(!pieceVal) return [];
 
-  const denom0 = Math.max(s.baseSpd * (1 - 0) * s.fury, 1e-9);
+  const denom0 = Math.max(s.baseSpd * s.fury, 1e-9);
   const requiredTotal0 = 1 - (TARGET_FINAL / denom0);
   const need = Math.max(0, requiredTotal0 - s.buffsBase);
 
@@ -113,7 +114,7 @@ function planCombos(){
     const equipPct = pieces * pieceVal;
     for(let qLevel=0; qLevel<=2; qLevel++){   // restriction
       const q = qLevel / 100;
-      for(let runePct=0.06; runePct>=-1e-9; runePct -= 0.01){
+      for(let runePct=0.06; runePct>=-1e-9; runePct-=0.01){
         const rFix = Math.max(0, runePct);
         for(const pet of pets){
           const coverage = equipPct + rFix + pet.v + q;
@@ -160,14 +161,13 @@ function recalc(){
   }
 
   const progress = s.requiredTotal <= 0 ? 1 : clamp((s.buffsAll)/s.requiredTotal, 0, 1);
-  document.getElementById('progressFill').style.width = (progress*100).toFixed(1) + '%';
+  els.progressFill.style.width = (progress*100).toFixed(1) + '%';
 
-  const pbar = document.getElementById('pbar');
-  pbar.classList.remove('good','warn','hit');
-  if(progress >= 1){ pbar.classList.add('good','hit'); }
-  else if(progress >= 0.9){ pbar.classList.add('warn'); }
+  els.pbar.classList.remove('good','warn','hit');
+  if(progress >= 1){ els.pbar.classList.add('good','hit'); }
+  else if(progress >= 0.9){ els.pbar.classList.add('warn'); }
 
-  document.getElementById('progressText').textContent = `Progress: ${(progress*100).toFixed(1)}% of required covered`;
+  els.progressText.textContent = `Progress: ${(progress*100).toFixed(1)}% of required covered`;
   els.requiredBox.value = (s.requiredRemaining*100).toFixed(2);
   els.finalBox.value    = s.finalSpd.toFixed(2);
 
@@ -190,15 +190,13 @@ function recalc(){
 function applyOptimal(){
   if(!lastBest){ alert('No optimal combo found yet.'); return; }
 
-  // numeric fields
   els.equip.value = (lastBest.equipPct * 100).toFixed(2);
   els.rune.value  = String(lastBest.rune);
 
-  // selects are numeric now
   const petMap = { None:'0', B:'6', A:'9', S:'12' };
   els.pet.value = petMap[lastBest.pet] || '0';
 
-  els.quicken.value = String(lastBest.quickLevel); // 0..2
+  els.quicken.value = String(lastBest.quickLevel);
 
   recalc();
 }
