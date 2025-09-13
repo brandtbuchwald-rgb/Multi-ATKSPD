@@ -15,6 +15,93 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+  :root{
+  --bg:#0c0f14; --bg2:#121826; --ink:#e8ecf8; --muted:#a8b0c2;
+  --accent:#c6a15b; --accent2:#fcd34d; --setGlow:rgba(198,161,91,.45);
+  --card:rgba(19,24,37,0.82); --border:rgba(255,255,255,0.08);
+  --shadowA:0 10px 30px rgba(0,0,0,.4);
+  --shadowB:inset 0 1px 0 rgba(255,255,255,.06), inset 0 -1px 0 rgba(0,0,0,.4);
+  --gradHead:linear-gradient(90deg,#3b2e13,#5a4516);
+  --gradCard:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+  --barBG:rgba(255,255,255,.06); --good:#22c55e; --warn:#f59e0b;
+  --glow:0 0 0 2px var(--setGlow), 0 0 22px var(--setGlow);
+}
+.theme-Abyss{ --accent:#7c3aed; --accent2:#a78bfa; --setGlow:rgba(124,58,237,.45); --gradHead:linear-gradient(90deg,#24143e,#3d2372); }
+.theme-Chaos{ --accent:#14b8a6; --accent2:#2dd4bf; --setGlow:rgba(20,184,166,.45); --gradHead:linear-gradient(90deg,#0d544e,#0f766e); }
+.theme-Original{ --accent:#ef4444; --accent2:#f87171; --setGlow:rgba(239,68,68,.45); --gradHead:linear-gradient(90deg,#7a1520,#b91c1c); }
+.theme-Primal{ --accent:#c6a15b; --accent2:#fcd34d; --setGlow:rgba(198,161,91,.45); --gradHead:linear-gradient(90deg,#3b2e13,#5a4516); }
+
+*{box-sizing:border-box} .hidden{display:none!important}
+html,body{height:100%}
+body{
+  margin:0;color:var(--ink); font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
+  background: radial-gradient(1200px 600px at -10% -20%, rgba(102,153,255,.12), transparent 60%),
+              radial-gradient(1000px 700px at 110% -10%, rgba(198,161,91,.12), transparent 50%),
+              linear-gradient(180deg, var(--bg), var(--bg2));
+}
+header{ position:sticky; top:0; z-index:50; background:var(--gradHead); color:#fff;
+  padding:18px 16px; border-bottom:1px solid var(--border); box-shadow:var(--shadowA); display:flex; align-items:center; gap:12px;}
+header h1{ margin:0; font-size:20px; letter-spacing:.5px; font-family:Cinzel,serif; flex:1; }
+header small{opacity:.8}
+header .lang-wrap{display:flex; align-items:center; gap:8px}
+header .lang-wrap label{font-weight:700; opacity:.85}
+main{max-width:1000px; margin:18px auto; padding:0 16px 120px;}
+
+.card{
+  background: radial-gradient(600px 300px at 30% -10%, rgba(255,255,255,.08), transparent 60%),
+              radial-gradient(500px 260px at 100% -10%, rgba(198,161,91,.10), transparent 60%),
+              repeating-linear-gradient(45deg, rgba(198,161,91,.03) 0 6px, rgba(198,161,91,.06) 6px 12px),
+              var(--card);
+  border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadowA); overflow:hidden; position:relative;
+}
+.card::before{content:""; position:absolute; inset:0; background:var(--gradCard); pointer-events:none;}
+.card>.inner{ padding:16px; }
+h2{font-size:15px; color:var(--muted); margin:0 0 10px 4px; font-weight:700; letter-spacing:.2px; text-transform:uppercase}
+.section{display:grid; grid-template-columns:260px 1fr; gap:12px; align-items:center;}
+.row{display:contents;} label{color:var(--muted); font-weight:700}
+
+select,input[type="number"],input[readonly]{ width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--border);
+  background:rgba(255,255,255,.06); color:var(--ink); font-weight:700; backdrop-filter:blur(8px); box-shadow:var(--shadowB);}
+.pct{position:relative}.pct input{padding-right:40px}
+.suffix{position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--muted); font-weight:800}
+
+.seg{display:flex; gap:8px; flex-wrap:wrap}
+.seg button,.btn{ appearance:none; border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03)); color:var(--ink);
+  border-radius:12px; padding:10px 12px; font-weight:800; cursor:pointer; box-shadow:var(--shadowB);
+  display:flex; align-items:center; gap:8px; transition:box-shadow .2s, outline-color .2s, background .2s;}
+.seg button.is-active{ outline:2px solid color-mix(in oklab, var(--accent) 45%, transparent);
+  background:linear-gradient(180deg, color-mix(in oklab, var(--accent) 25%, transparent), rgba(255,255,255,.06));}
+#weaponSeg button.is-active{ box-shadow:var(--glow), var(--shadowB); }
+
+.icon{width:18px;height:18px;display:inline-block;border-radius:4px}
+.icon.bers{background:conic-gradient(from 45deg,#d97706,#f59e0b,#facc15);}
+.icon.pala{background:conic-gradient(from 45deg,#60a5fa,#93c5fd,#c7d2fe);}
+.icon.rang{background:conic-gradient(from 45deg,#34d399,#10b981,#059669);}
+.icon.sorc{background:conic-gradient(from 45deg,#a78bfa,#8b5cf6,#7c3aed);}
+
+.btn{ background:linear-gradient(180deg, color-mix(in oklab, var(--accent) 45%, transparent), color-mix(in oklab, var(--accent) 15%, transparent));
+  outline:2px solid color-mix(in oklab, var(--accent) 35%, transparent);}
+.btn:active{transform:translateY(1px)}
+
+.bar{height:16px; background:var(--barBG); border-radius:999px; overflow:hidden; position:relative}
+.bar>div{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent2)); transition:width .25s}
+.bar.hit::after{content:""; position:absolute; inset:0; background:linear-gradient(120deg, rgba(255,255,255,.0) 20%, rgba(255,255,255,.45) 50%, rgba(255,255,255,.0) 80%);
+  transform:translateX(-100%); animation:shimmer 1.5s ease-out 1;}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.bar.good>div{background:linear-gradient(90deg, var(--good), #16a34a)}
+.bar.warn>div{background:linear-gradient(90deg, var(--warn), #d97706)}
+.muted{color:var(--muted); font-size:.95rem}
+
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.stat{border-radius:14px; padding:14px; border:1px solid var(--border); background:rgba(255,255,255,.06); box-shadow:var(--shadowB)}
+.stat label{color:var(--muted); font-size:.9rem; margin-bottom:6px; display:block}
+.stat .value input{font-size:22px; padding:14px}
+
+footer{ position:fixed; bottom:0; left:0; width:100%;
+  text-align:center; background:linear-gradient(90deg, rgba(0,0,0,.3), rgba(0,0,0,.5));
+  color:#fff; padding:10px 12px; font-size:13px; z-index:50; backdrop-filter: blur(6px);}
+@media(max-width:780px){ .section,.stats{grid-template-columns:1fr} }
 /* === FULL CSS from your original index.html === */
 /* For brevity not pasted here, but all styles intact in real file */
 </style>
