@@ -194,8 +194,8 @@ function applyOptimal(){
   els.equip.value = (lastBest.equipPct * 100).toFixed(2);
   els.rune.value  = String(lastBest.rune);
 
-  const petMap = { None:'0', B:'6', A:'9', S:'12' };
-  els.pet.value = petMap[lastBest.pet] || '0';
+  const petMap = { None:0, B:6, A:9, S:12 };
+els.pet.value = String(petMap[lastBest.pet] || 0);
 
   els.quicken.value = String(lastBest.quickLevel);
   recalc();
