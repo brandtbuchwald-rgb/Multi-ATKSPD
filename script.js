@@ -81,7 +81,7 @@ function currentState(includeEquipRune=true){
   const rune   = includeEquipRune ? pctInput('rune')  : 0;
   const petPct = pctSelect('pet');
   const quick  = pctSelect('quicken'); // values 0..5 → 0..0.05
-  const fury   = (els.fury.checked && cls === 'Berserker') ? 0.25 : 1.0;
+  const fury = (els.fury.checked && cls === 'Berserker') ? 1.25 : 1.0;
 
   const buffsBase = char + color + guild + secret;
   const buffsAll  = buffsBase + equip + rune + petPct;
