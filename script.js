@@ -59,20 +59,41 @@ document.getElementById('furyBtn')?.addEventListener('click', ()=>{
 // Helpers
 const clamp=(x,min,max)=>Math.max(min,Math.min(max,x));
 const pctInput=id=>(parseFloat(els[id].value||0)/100);
-const pctSelect=id=>(parseFloat(els[id].value||0)/100);
+
+// Map select keys (from i18n.js) to numeric percentages
+const KEY_TO_PCT = {
+  char:   { none:0, heroic:0.07, swift:0.10 },
+  col:    { normal:0, blue:0.10, orange:0.20, purple:0.30 },
+  pet:    { petNone:0, petB:0.06, petA:0.09, petS:0.12 },
+  quicken:{ qNone:0, q1:0.01, q2:0.02, q3:0.03, q4:0.04, q5:0.05 }
+};
+
+function pctSelect(id){
+  const v = (els[id].value || "").trim();
+  // If numeric string, just use it
+  const num = Number(v);
+  if (!Number.isNaN(num)) return num / 100;
+  // Otherwise map key to percentage
+  const m = KEY_TO_PCT[id] || {};
+  return m[v] ?? 0;
+}
+
 const fmtPct=f=>(f*100).toFixed(2)+'%';
+
 const applyTheme=()=>{
   const b=document.body;
   b.classList.remove('theme-Abyss','theme-Chaos','theme-Original','theme-Primal');
   b.classList.add('theme-'+els.optSet.value);
 };
-
 function currentState(includeEquipRune=true){
   const cls=els.cls.value, weap=els.weap.value, baseSpd=base[weap][cls];
   const char=pctSelect('char'), color=pctSelect('col'), guild=pctInput('guild'), secret=pctInput('secret');
-  const equip=includeEquipRune?pctInput('equip'):0, rune=includeEquipRune?pctInput('rune'):0, petPct=pctSelect('pet');
-  const quick=(parseFloat(els.quicken.value||0)/100);
-  const fury=(els.fury.checked&&cls==='Berserker')?0.25:1.0;
+  const equip=includeEquipRune ? pctInput('equip') : 0;
+  const rune =includeEquipRune ? pctInput('rune')  : 0;
+  const petPct=pctSelect('pet');
+  const quick =pctSelect('quicken');   // <-- change was here
+  const fury=(els.fury.checked && cls==='Berserker') ? 0.25 : 1.0;
+
   const buffsBase=char+color+guild+secret;
   const buffsAll=buffsBase+equip+rune+petPct;
   const denom=Math.max(baseSpd*(1-quick)*fury,1e-9);
@@ -82,7 +103,6 @@ function currentState(includeEquipRune=true){
   const finalSpd=Math.max(finalRaw, TARGET_FINAL);
   return {cls,weap,baseSpd,char,color,guild,secret,equip,rune,petPct,quick,fury,buffsBase,buffsAll,requiredTotal,requiredRemaining,finalSpd};
 }
-
 // Optimizer with Quicken restriction (≤ Lv.2)
 function planCombos(){
   const s=currentState(false);
@@ -161,12 +181,29 @@ function recalc(){
 }
 
 function applyOptimal(){
-  if(!lastBest){alert('No optimal combo found yet.'); return;}
-  els.equip.value=(lastBest.equipPct*100).toFixed(2);
-  els.rune.value=String(lastBest.rune);
-  const petMap={'None':'0','B':'6','A':'9','S':'12'};
-  els.pet.value=petMap[lastBest.pet]||'0';
-  els.quicken.value=String(lastBest.quickLevel);
+  if(!lastBest){
+    alert('No optimal combo found yet.');
+    return;
+  }
+
+  // Numeric fields can stay as-is
+  els.equip.value = (lastBest.equipPct * 100).toFixed(2);
+  els.rune.value  = String(lastBest.rune);
+
+  // Map optimizer pet names to select keys
+  const petKeyMap = {
+    None: 'petNone',
+    B:    'petB',
+    A:    'petA',
+    S:    'petS'
+  };
+  els.pet.value = petKeyMap[lastBest.pet] || 'petNone';
+
+  // Map optimizer quickLevel (0–2) to select keys
+  els.quicken.value = lastBest.quickLevel === 0
+    ? 'qNone'
+    : `q${lastBest.quickLevel}`;
+
   recalc();
 }
 els.applyBest?.addEventListener('click', applyOptimal);
