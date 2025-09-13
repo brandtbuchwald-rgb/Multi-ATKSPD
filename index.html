@@ -61,48 +61,50 @@
       <select id="weap" class="hidden"></select>
     </div>
 
-    <div class="row">
-      <label data-i18n="char">Characteristic</label>
-      <select id="char"></select>
-    </div>
+    <!-- Characteristic -->
+<div class="row">
+  <label data-i18n="char">Characteristic</label>
+  <select id="char">
+    <option value="0">None</option>
+    <option value="7">Heroic (+7%)</option>
+    <option value="10">Swift (+10%)</option>
+  </select>
+</div>
 
-    <div class="row">
-      <label data-i18n="col">Atk SPD Colour</label>
-      <select id="col"></select>
-    </div>
+<!-- Atk SPD Colour -->
+<div class="row">
+  <label data-i18n="col">Atk SPD Colour</label>
+  <select id="col">
+    <option value="0">Normal (+0%)</option>
+    <option value="10">Blue (+10%)</option>
+    <option value="20">Orange (+20%)</option>
+    <option value="30">Purple (+30%)</option>
+  </select>
+</div>
 
-    <div class="row">
-      <label data-i18n="guild">Guild Buff</label>
-      <div class="pct"><input id="guild" type="number" inputmode="decimal" step="0.1" value="5"><span class="suffix">%</span></div>
-    </div>
+<!-- Pet Gear -->
+<div class="row">
+  <label data-i18n="pet">Pet Gear</label>
+  <select id="pet">
+    <option value="0">None</option>
+    <option value="6">B (+6%)</option>
+    <option value="9">A (+9%)</option>
+    <option value="12">S (+12%)</option>
+  </select>
+</div>
 
-    <div class="row">
-      <label data-i18n="secret">Secret Tech</label>
-      <div class="pct"><input id="secret" type="number" inputmode="decimal" step="0.1" value="10"><span class="suffix">%</span></div>
-    </div>
-
-    <div class="row">
-      <label data-i18n="equip">Equipment ATK SPD</label>
-      <div class="pct"><input id="equip" type="number" inputmode="decimal" step="0.1" value="0"><span class="suffix">%</span></div>
-    </div>
-
-    <div class="row">
-      <label data-i18n="rune">Rune ATK SPD</label>
-      <div class="pct"><input id="rune" type="number" inputmode="decimal" step="0.1" value="0"><span class="suffix">%</span></div>
-    </div>
-
-    <div class="row">
-      <label data-i18n="pet">Pet Gear</label>
-      <select id="pet"></select>
-    </div>
-
-    <input id="target" type="hidden" value="0.25">
-
-    <div class="row">
-      <label data-i18n="quicken">Quicken</label>
-      <select id="quicken"></select>
-    </div>
-
+<!-- Quicken -->
+<div class="row">
+  <label data-i18n="quicken">Quicken</label>
+  <select id="quicken">
+    <option value="0">None</option>
+    <option value="1">Lv.1 (+1%)</option>
+    <option value="2">Lv.2 (+2%)</option>
+    <option value="3">Lv.3 (+3%)</option>
+    <option value="4">Lv.4 (+4%)</option>
+    <option value="5">Lv.5 (+5%)</option>
+  </select>
+</div>
     <div class="row" id="furyRow">
       <label data-i18n="fury">Fury Lv.10</label>
       <div class="seg"><button type="button" id="furyBtn" data-on="0" data-i18n="off">Off</button></div>
