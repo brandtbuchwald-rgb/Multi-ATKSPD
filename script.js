@@ -70,7 +70,9 @@ const applyTheme = () => {
 
 // Core calc
 function currentState(includeEquipRune=true){
-  const cls = els.cls.value, weap = els.weap.value, baseSpd = base[weap][cls];
+  const cls = els.cls.value;
+  const weap = els.weap.value;
+  const baseSpd = base[weap][cls];
 
   const char   = pctSelect('char');
   const color  = pctSelect('col');
@@ -81,7 +83,7 @@ function currentState(includeEquipRune=true){
   const rune   = includeEquipRune ? pctInput('rune')  : 0;
   const petPct = pctSelect('pet');
   const quick  = pctSelect('quicken'); // values 0..5 → 0..0.05
-  const fury = (els.fury.checked && cls === 'Berserker') ? 1.25 : 1.0;
+  const fury   = (els.fury.checked && cls === 'Berserker') ? 1.25 : 1.0; // FIXED
 
   const buffsBase = char + color + guild + secret;
   const buffsAll  = buffsBase + equip + rune + petPct;
@@ -93,10 +95,16 @@ function currentState(includeEquipRune=true){
   const finalRaw = baseSpd * (1 - buffsAll) * (1 - quick) * fury;
   const finalSpd = Math.max(finalRaw, TARGET_FINAL);
 
-  return {cls,weap,baseSpd,char,color,guild,secret,equip,rune,petPct,quick,fury,buffsBase,buffsAll,requiredTotal,requiredRemaining,finalSpd};
+  // DEBUG dump directly into page
+  document.getElementById('progressText').insertAdjacentHTML(
+    'beforeend',
+    `<br><small>DEBUG base=${baseSpd}, fury=${fury}, quick=${quick}, buffsAll=${buffsAll.toFixed(3)}, reqRem=${(requiredRemaining*100).toFixed(2)}%, final=${finalSpd.toFixed(2)}</small>`
+  );
+
+  return {cls,weap,baseSpd,char,color,guild,secret,equip,rune,petPct,quick,fury,
+          buffsBase,buffsAll,requiredTotal,requiredRemaining,finalSpd};
 }
 
-// Optimizer with Quicken restriction (≤ Lv.2)
 function planCombos(){
   const s = currentState(false);
   const chosen   = els.optSet.value;
@@ -120,11 +128,9 @@ function planCombos(){
           const coverage = equipPct + rFix + pet.v + q;
           if(coverage + 1e-9 >= need){
             const waste = coverage - need;
-            results.push({
-              set:chosen, quickLevel:qLevel, pieces,
+            results.push({ set:chosen, quickLevel:qLevel, pieces,
               equipPct, rune:Math.round(rFix*100),
-              pet:pet.name, petV:pet.v, total:coverage, waste
-            });
+              pet:pet.name, petV:pet.v, total:coverage, waste });
             break;
           }
         }
@@ -132,6 +138,9 @@ function planCombos(){
     }
   }
 
+  console.log("DEBUG planCombos need=", need, "results=", results.length);
+  return results;
+}
   results.sort((a,b)=>(a.pieces-b.pieces)||(a.quickLevel-b.quickLevel)||(b.rune-a.rune)||(b.petV-a.petV)||(a.waste-b.waste));
   const uniq=[], seen=new Set();
   for(const r of results){
