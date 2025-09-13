@@ -83,7 +83,7 @@ function currentState(includeEquipRune=true){
   const rune   = includeEquipRune ? pctInput('rune')  : 0;
   const petPct = pctSelect('pet');
   const quick  = pctSelect('quicken'); // values 0..5 → 0..0.05
-  const fury   = (els.fury.checked && cls === 'Berserker') ? 1.25 : 1.0; // FIXED
+  const fury   = (els.fury.checked && cls === 'Berserker') ? 1.25 : 1.0;
 
   const buffsBase = char + color + guild + secret;
   const buffsAll  = buffsBase + equip + rune + petPct;
@@ -95,16 +95,11 @@ function currentState(includeEquipRune=true){
   const finalRaw = baseSpd * (1 - buffsAll) * (1 - quick) * fury;
   const finalSpd = Math.max(finalRaw, TARGET_FINAL);
 
-  // DEBUG dump directly into page
-  document.getElementById('progressText').insertAdjacentHTML(
-    'beforeend',
-    `<br><small>DEBUG base=${baseSpd}, fury=${fury}, quick=${quick}, buffsAll=${buffsAll.toFixed(3)}, reqRem=${(requiredRemaining*100).toFixed(2)}%, final=${finalSpd.toFixed(2)}</small>`
-  );
-
   return {cls,weap,baseSpd,char,color,guild,secret,equip,rune,petPct,quick,fury,
           buffsBase,buffsAll,requiredTotal,requiredRemaining,finalSpd};
 }
 
+// Optimizer with Quicken restriction (≤ Lv.2)
 function planCombos(){
   const s = currentState(false);
   const chosen   = els.optSet.value;
@@ -115,7 +110,10 @@ function planCombos(){
   const requiredTotal0 = 1 - (TARGET_FINAL / denom0);
   const need = Math.max(0, requiredTotal0 - s.buffsBase);
 
-  const pets = [{name:'S',v:0.12},{name:'A',v:0.09},{name:'B',v:0.06},{name:'None',v:0.00}];
+  const pets = [
+    {name:'S',v:0.12},{name:'A',v:0.09},
+    {name:'B',v:0.06},{name:'None',v:0.00}
+  ];
   const results = [];
 
   for(let pieces=0; pieces<=MAX_EQUIP_PIECES; pieces++){
@@ -140,7 +138,6 @@ function planCombos(){
     }
   }
 
-  // sort + dedupe
   results.sort((a,b)=>(a.pieces-b.pieces)||(a.quickLevel-b.quickLevel)||(b.rune-a.rune)||(b.petV-a.petV)||(a.waste-b.waste));
   const uniq=[], seen=new Set();
   for(const r of results){
@@ -148,10 +145,9 @@ function planCombos(){
     if(!seen.has(k)){ uniq.push(r); seen.add(k); }
     if(uniq.length>=7) break;
   }
-
-  console.log("DEBUG planCombos need=", need, "results=", uniq.length);
   return uniq;
 }
+
 const lineOf = r =>
   `${r.set}: ${r.pieces} piece${r.pieces===1?'':'s'} (${(r.equipPct*100).toFixed(2)}%)  |  Rune ${r.rune}%  |  Pet ${r.pet}  |  Quicken Lv.${r.quickLevel}`;
 
@@ -205,7 +201,7 @@ function applyOptimal(){
   els.rune.value  = String(lastBest.rune);
 
   const petMap = { None:0, B:6, A:9, S:12 };
-els.pet.value = String(petMap[lastBest.pet] || 0);
+  els.pet.value = String(petMap[lastBest.pet] || 0);
 
   els.quicken.value = String(lastBest.quickLevel);
   recalc();
