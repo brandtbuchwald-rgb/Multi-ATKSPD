@@ -15,7 +15,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
-  
 </head>
 
 <body class="theme-Primal">
@@ -32,12 +31,13 @@
 </header>
 
 <main>
-  <!-- UI content for <main> -->
 
 <!-- Base & Buffs -->
 <div class="card"><div class="inner">
   <h2 data-i18n="buffs">Base & Buffs</h2>
   <div class="section">
+
+    <!-- Class -->
     <div class="row">
       <label data-i18n="class">Class</label>
       <div class="seg" id="classSeg">
@@ -49,6 +49,7 @@
       <select id="cls" class="hidden"></select>
     </div>
 
+    <!-- Weapon -->
     <div class="row">
       <label data-i18n="weapon">Weapon</label>
       <div class="seg" id="weaponSeg">
@@ -62,54 +63,57 @@
     </div>
 
     <!-- Characteristic -->
-<div class="row">
-  <label data-i18n="char">Characteristic</label>
-  <select id="char">
-    <option value="0">None</option>
-    <option value="7">Heroic (+7%)</option>
-    <option value="10">Swift (+10%)</option>
-  </select>
-</div>
+    <div class="row">
+      <label data-i18n="char">Characteristic</label>
+      <select id="char">
+        <option value="0" data-i18n="none">None</option>
+        <option value="7" data-i18n="heroic">Heroic (+7%)</option>
+        <option value="10" data-i18n="swift">Swift (+10%)</option>
+      </select>
+    </div>
 
-<!-- Atk SPD Colour -->
-<div class="row">
-  <label data-i18n="col">Atk SPD Colour</label>
-  <select id="col">
-    <option value="0">Normal (+0%)</option>
-    <option value="10">Blue (+10%)</option>
-    <option value="20">Orange (+20%)</option>
-    <option value="30">Purple (+30%)</option>
-  </select>
-</div>
+    <!-- Atk SPD Colour -->
+    <div class="row">
+      <label data-i18n="col">Atk SPD Colour</label>
+      <select id="col">
+        <option value="0" data-i18n="normal">Normal (+0%)</option>
+        <option value="10" data-i18n="blue">Blue (+10%)</option>
+        <option value="20" data-i18n="orange">Orange (+20%)</option>
+        <option value="30" data-i18n="purple">Purple (+30%)</option>
+      </select>
+    </div>
 
-<!-- Pet Gear -->
-<div class="row">
-  <label data-i18n="pet">Pet Gear</label>
-  <select id="pet">
-    <option value="0">None</option>
-    <option value="6">B (+6%)</option>
-    <option value="9">A (+9%)</option>
-    <option value="12">S (+12%)</option>
-  </select>
-</div>
+    <!-- Pet Gear -->
+    <div class="row">
+      <label data-i18n="pet">Pet Gear</label>
+      <select id="pet">
+        <option value="0" data-i18n="petNone">None</option>
+        <option value="6" data-i18n="petB">B (6%)</option>
+        <option value="9" data-i18n="petA">A (9%)</option>
+        <option value="12" data-i18n="petS">S (12%)</option>
+      </select>
+    </div>
 
-<!-- Quicken -->
-<div class="row">
-  <label data-i18n="quicken">Quicken</label>
-  <select id="quicken">
-    <option value="0">None</option>
-    <option value="1">Lv.1 (+1%)</option>
-    <option value="2">Lv.2 (+2%)</option>
-    <option value="3">Lv.3 (+3%)</option>
-    <option value="4">Lv.4 (+4%)</option>
-    <option value="5">Lv.5 (+5%)</option>
-  </select>
-</div>
+    <!-- Quicken -->
+    <div class="row">
+      <label data-i18n="quicken">Quicken</label>
+      <select id="quicken">
+        <option value="0" data-i18n="qNone">None</option>
+        <option value="1" data-i18n="q1">Lv.1 (+1%)</option>
+        <option value="2" data-i18n="q2">Lv.2 (+2%)</option>
+        <option value="3" data-i18n="q3">Lv.3 (+3%)</option>
+        <option value="4" data-i18n="q4">Lv.4 (+4%)</option>
+        <option value="5" data-i18n="q5">Lv.5 (+5%)</option>
+      </select>
+    </div>
+
+    <!-- Fury -->
     <div class="row" id="furyRow">
       <label data-i18n="fury">Fury Lv.10</label>
       <div class="seg"><button type="button" id="furyBtn" data-on="0" data-i18n="off">Off</button></div>
       <input id="fury" type="checkbox" class="hidden">
     </div>
+
   </div>
 
   <div style="margin-top:12px" class="section">
@@ -156,7 +160,7 @@
   <h2 style="margin-top:8px" data-i18n="alts">Alternates</h2>
   <ul id="altList" style="margin:8px 0 0 18px"></ul>
 </div></div>
-  
+
 </main>
 
 <footer>
@@ -166,6 +170,6 @@
 </footer>
 
 <script src="i18n.js"></script>
-<script src="script.js?v=111"></script>
+<script src="script.js?v=200"></script>
 </body>
 </html>
