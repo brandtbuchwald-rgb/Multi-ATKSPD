@@ -88,18 +88,23 @@ const i18n = {
 
 function buildOptions(){
   const map = {
-    char:["none","heroic","swift"],
-    col:["normal","blue","orange","purple"],
-    pet:["petNone","petB","petA","petS"],
-    quicken:["qNone","q1","q2","q3","q4","q5"],
+    char:    [["none",0],["heroic",7],["swift",10]],
+    col:     [["normal",0],["blue",10],["orange",20],["purple",30]],
+    pet:     [["petNone",0],["petB",6],["petA",9],["petS",12]],
+    quicken: [["qNone",0],["q1",1],["q2",2],["q3",3],["q4",4],["q5",5]],
   };
-  for(const [id,keys] of Object.entries(map)){
+  for(const [id,entries] of Object.entries(map)){
     const sel=document.getElementById(id); if(!sel) continue;
     sel.innerHTML="";
-    keys.forEach(k=>{const o=document.createElement("option"); o.value=k; o.setAttribute("data-i18n",k); o.textContent=i18n.en[k]||k; sel.appendChild(o);});
+    entries.forEach(([key,val])=>{
+      const o=document.createElement("option");
+      o.value = val;              // numeric for the math
+      o.setAttribute("data-i18n",key); // key for translations
+      o.textContent = i18n.en[key] || key;
+      sel.appendChild(o);
+    });
   }
 }
-
 function applyLang(lang){
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const key=el.getAttribute("data-i18n");
